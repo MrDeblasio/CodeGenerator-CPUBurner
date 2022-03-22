@@ -74,38 +74,19 @@ class Program
 	{
 		// GeneratePassword();
 
-		Thread t = new Thread(new ThreadStart(FindPassword));
-		t.Start();
+		List<Thread> Threads = new List<Thread>();
 
-		Thread t2 = new Thread(new ThreadStart(FindPassword));
-		t2.Start();
+		for (int i = 0; i < 1000; i++)
+		{
+			Thread t = new Thread(FindPassword);
+			Threads.Add(t);
+		}
 
-		Thread t3 = new Thread(new ThreadStart(FindPassword));
-		t3.Start();
-
-		Thread t4 = new Thread(new ThreadStart(FindPassword));
-		t4.Start();
-
-		Thread t5 = new Thread(new ThreadStart(FindPassword));
-		t5.Start();
-
-		Thread t6 = new Thread(new ThreadStart(FindPassword));
-		t6.Start();
-
-		Thread t7 = new Thread(new ThreadStart(FindPassword));
-		t7.Start();
-
-		Thread t8 = new Thread(new ThreadStart(FindPassword));
-		t8.Start();
-
-		t.Join();
-		t2.Join();
-		t3.Join();
-		t4.Join();
-		t5.Join();
-		t6.Join();
-		t7.Join();
-		t8.Join();
+		foreach (Thread t in Threads)
+		{
+			t.Start();
+			t.Join();
+		}
 
 		Console.WriteLine($"All threads finished.");
 	}
