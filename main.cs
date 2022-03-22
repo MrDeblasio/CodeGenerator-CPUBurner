@@ -2,27 +2,29 @@ using System;
 using System.Threading;
 using System.Collections.Generic;
 
-class Program {
+class Program
+{
 
 	static bool isrunning = true;
-	
-	static string password = "digits";
+
+	static string password = "ljp";
 	static string word = "";
 	const int intlimit = 2147480000;
 	static int limitsreached = 0;
 	static int attempts = 0;
-	static int wordlength = 6;
+	static int wordlength = 3;
 	static Random rand = new Random();
 	static string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
 	// static string chars = "1234567890";
 
 	static DateTime StartingTime = DateTime.Now;
 	static DateTime EndingTime;
-	
+
 	static void GeneratePassword()
 	{
 		string tempword = "";
-		for (int i = 0; i < wordlength; i++){
+		for (int i = 0; i < wordlength; i++)
+		{
 			int randint = rand.Next(0, chars.Length);
 			// Console.WriteLine(chars[randint]);
 			tempword += chars[randint];
@@ -33,10 +35,11 @@ class Program {
 
 	static void FindPassword()
 	{
-		while(isrunning)
+		while (isrunning)
 		{
 			string tempword = "";
-			for (int i = 0; i < wordlength; i++){
+			for (int i = 0; i < wordlength; i++)
+			{
 				int randint = rand.Next(0, chars.Length);
 				// Console.WriteLine(chars[randint]);
 				tempword += chars[randint];
@@ -44,32 +47,33 @@ class Program {
 
 			word = tempword;
 
-			if(attempts >= intlimit)
+			if (attempts >= intlimit)
 			{
 				limitsreached++;
+				// Console.WriteLine($"Integer limit reached, total: {limitsreached}");
 				attempts = 0;
-			} else {
-				attempts++;
 			}
-
-			if (attempts % 100000 == 0)
+			else
 			{
-				Console.WriteLine($"Attempts reached {attempts}");
+				attempts++;
+				Console.WriteLine($"{attempts}, {limitsreached}, {tempword}");
 			}
 			// Console.WriteLine($"{tempword}");
 
 			if (password == tempword && isrunning == false)
 			{
 				EndingTime = DateTime.Now;
-				Console.WriteLine($"Found word! Word: {tempword}\n\nAttempt count: {attempts + (intlimit*limitsreached)}\n\nStartingTime: {StartingTime}\nEndingTime: {EndingTime}\nTimeDifference: {EndingTime.Subtract(StartingTime).TotalMinutes}");
+				// Attempt count: {attempts + (intlimit*limitsreached)}\n\
+				Console.WriteLine($"Found word! Word: {tempword}\n\nStartingTime: {StartingTime}\nEndingTime: {EndingTime}\nTimeDifference: {EndingTime.Subtract(StartingTime).TotalMinutes}");
 				isrunning = false;
 			}
 		}
 	}
-	
-  	public static void Main (string[] args) {
+
+	public static void Main(string[] args)
+	{
 		// GeneratePassword();
-		
+
 		Thread t = new Thread(new ThreadStart(FindPassword));
 		t.Start();
 
@@ -104,5 +108,5 @@ class Program {
 		t8.Join();
 
 		Console.WriteLine($"All threads finished.");
-  	}
+	}
 }
